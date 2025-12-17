@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>VK Object Detection</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 1000px; margin: auto; }
+        .form-group { margin-bottom: 15px; }
+        input[type="file"] { padding: 8px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; background: #f9f9f9; }
+        .canvas-container { position: relative; display: inline-block; }
+        .canvas-container img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        .canvas-container canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .label-item { margin: 5px 0; padding: 5px; background: #eef; border: 1px solid #ccc; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>VK Cloud Vision — Обнаружение объектов</h2>
+
+    <form method="POST" enctype="multipart/form-data" action="/upload">
+        <div class="form-group">
+            <input type="file" name="image" accept="image/*" required>
+        </div>
+        <button type="submit">Загрузить и проанализировать</button>
+    </form>
+
+    <div th:if="${error}" class="error" th:text="${error}">Ошибка</div>
+
+    <div th:if="${response?.body?.multiobject_labels}" class="result">
+        <h3>Результаты анализа для: <span th:text="${fileName}"></span></h3>
+
+        <div class="canvas-container">
+            <img id="uploadedImage" th:src="'data:image/jpeg;base64,' + ${imageBase64}" alt="Загруженное изображение">
+            <canvas id="detectionCanvas"></canvas>
+        </div>
+
+        <h4>Найденные объекты:</h4>
+        <div th:each="label : ${response.body.multiobject_labels[0].labels}" class="label-item">
+            <strong th:text="${label.rus}">Объект</strong>
+            (<span th:text="${#numbers.formatDecimal(label.prob, 1, 2)}">0.00</span>)
+            Координаты: <code th:text="${label.coord}">[x,y,x2,y2]</code>
+        </div>
+    </div>
+
+    <!-- Передаем данные в глобальную переменную -->
+    <script th:if="${response?.body?.multiobject_labels}" th:inline="javascript">
+        window.vkVisionLabels = /*[[${response?.body?.multiobject_labels?.[0]?.labels}]]*/ [];
+    </script>
+
+    <!-- Подключаем внешний скрипт -->
+    <script src="/js/detection.js" defer></script>
+</div>
+</body>
+</html>

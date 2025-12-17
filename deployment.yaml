@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vkvision-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vkvision
+  template:
+    metadata:
+      labels:
+        app: vkvision
+    spec:
+      containers:
+        - name: vkvision-container
+          image: vkvision-app:1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "dev"

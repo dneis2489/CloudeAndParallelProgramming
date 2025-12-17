@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    image: vk_vision1
+    ports:
+      - "8080:8080"
+  app2:
+    build: .
+    image: vk_vision2
+    ports:
+      - "9090:8080"
