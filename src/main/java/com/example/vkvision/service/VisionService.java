@@ -1,5 +1,6 @@
 package com.example.vkvision.service;
 
+import com.example.vkvision.model.VisionResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
@@ -24,7 +25,7 @@ public class VisionService {
         this.restTemplate = restTemplate;
     }
 
-    public Object detectObjects(byte[] imageBytes, String fileName) {
+    public VisionResponse detectObjects(byte[] imageBytes, String fileName) {
         // 1. Формируем URI с параметрами
         String url = UriComponentsBuilder.fromUriString(API_URL)
                 .queryParam("oauth_token", oauthToken)
@@ -58,9 +59,9 @@ public class VisionService {
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
         // 3. Отправляем запрос
-        ResponseEntity<Object> response;
+        ResponseEntity<VisionResponse> response;
         try {
-            response = restTemplate.postForEntity(url, requestEntity, Object.class);
+            response = restTemplate.postForEntity(url, requestEntity, VisionResponse.class);
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при вызове VK Vision API", e);
         }
