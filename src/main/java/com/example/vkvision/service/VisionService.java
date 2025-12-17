@@ -1,6 +1,5 @@
 package com.example.vkvision.service;
 
-import com.example.vkvision.model.VisionResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
@@ -9,11 +8,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import com.fasterxml.jackson.databind.JsonNode;
-import tools.jackson.core.TreeNode;
-import tools.jackson.databind.ObjectMapper;
-
-import java.util.Map;
 
 
 @Service

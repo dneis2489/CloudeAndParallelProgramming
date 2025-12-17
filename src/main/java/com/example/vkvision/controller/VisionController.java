@@ -1,6 +1,5 @@
 package com.example.vkvision.controller;
 
-import com.example.vkvision.model.VisionResponse;
 import com.example.vkvision.service.VisionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
