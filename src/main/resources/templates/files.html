@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Файлы в бакете: <span th:text="${bucketName}"></span></title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Файлы в бакете: <span th:text="${bucketName}"></span></h1>
+
+    <form th:action="@{/files/{bucketName}/upload(bucketName=${bucketName})}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Загрузить файл</button>
+    </form>
+
+    <hr>
+
+    <ul th:if="${files != null and !files.empty}">
+        <li th:each="file : ${files}">
+            <span th:text="${file}"></span>
+            <form th:action="@{/files/{bucketName}/delete/{fileName}(bucketName=${bucketName}, fileName=${file})}" method="post" style="display:inline;">
+                <button type="submit" onclick="return confirm('Удалить файл?')">Удалить</button>
+            </form>
+        </li>
+    </ul>
+    <p th:if="${files == null or files.empty}">Файлы отсутствуют.</p>
+
+    <div th:if="${message}" class="message" th:text="${message}"></div>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <a href="/buckets" class="btn">Назад к бакетам</a>
+</div>
+</body>
+</html>
